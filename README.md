@@ -1,0 +1,34 @@
+# Meetroom
+## Introduction
+Testing project for booking meeting
+## System requirements:
+* Java 8
+* Maven
+* Postgre SQL
+## Start application
+To use the app, you must complete the following steps
+### Create the Database
+* `psql -U postgres`
+* `postgres=# create database meet-room;`
+* `postgres=# create user admin with encrypted password '1q2a3z';`
+### Run application
+* `mvn clean package`
+* `java -jar target/meet-room-0.0.1-SNAPSHOT.jar`
+## Usage
+Open link in a browser: http://localhost:8080/. You need to log in <br />
+Database has next users:
+login | password
+--- | ---
+alexei.stratonov | 123
+alexei.filipov | 123
+dmitrii.kuznetsov | 123
+
+If you want reserve meeting room click on the button "Забронировать комнату" and
+on the opened page insert a start time, duration, title, guest username (login of another user) and description.
+If you want to see a full detail you need click on the event card.
+
+
+## Сonstraints
+* One meeting room
+* Event duration can be 00:30 - 23:59
+* Events can't overlap
