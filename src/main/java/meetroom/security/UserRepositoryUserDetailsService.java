@@ -1,5 +1,7 @@
 package meetroom.security;
 
+import java.util.NoSuchElementException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,7 +22,7 @@ public class UserRepositoryUserDetailsService implements UserDetailsService {
 
 	@Override
 	public User loadUserByUsername(String username) throws UsernameNotFoundException {
-		return userRepo.findByUsername(username).orElseThrow();
+		return userRepo.findByUsername(username).orElseThrow(NoSuchElementException::new);
 	}
 
 }

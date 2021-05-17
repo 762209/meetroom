@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
@@ -50,7 +51,7 @@ public class MeetingService {
 		return repository.getEventBetweenDates(date);
 	}
 	public Event findById(Long id) {
-		return repository.findById(id).orElseThrow();
+		return repository.findById(id).orElseThrow(NoSuchElementException::new);
 	}
 	public Event save(Event event) {
 		return repository.save(event);
