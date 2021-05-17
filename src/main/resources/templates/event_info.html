@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" 
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Детали бронирования</title>
+<link rel="stylesheet" th:href="@{/calendar.css}" />
+</head>
+<body>
+	<div th:if="${currUser != null}" class="userInfo">
+		[[${currUser.surname}]]
+		<form method="POST" th:action="@{/logout}">
+			<input type="submit" value="Выйти"/>
+		</form>
+	</div>
+	<h1>[[${event.title}]]</h1>
+	<h4>Создатель события: [[${event.user.username}]]</h4>
+	<h4>Гость: [[${user.guest.username}]]</h4>
+	<h2>Описание события</h2>
+	<div>
+		[[${event.description}]]
+	</div>
+</body>
+</html>

@@ -1,0 +1,28 @@
+@charset "UTF-8";
+body {
+	background-color: brown;
+	color: white;
+}
+table{
+    border-collapse: collapse;
+}
+table thead tr th{
+    border-bottom: 2px solid white;
+}
+table td {
+    border-right: 3px solid white;
+}
+table th, table td{
+    padding: 4px 8px;
+}
+a {
+	color: white;
+	text-decoration: none;
+}
+button {
+	text-align: left;
+}
+.userInfo {
+	font-size: 22px;
+	font-weight: 600;
+}

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" 
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>Календарь бронирования</title>
+	<link rel="stylesheet" th:href="@{/calendar.css}" />
+</head>
+<body>
+	<div th:if="${currUser != null}" class="userInfo">
+		[[${currUser.surname}]]
+		<form method="POST" th:action="@{/logout}">
+			<input type="submit" value="Выйти"/>
+		</form>
+	</div>
+	<h1>MeetRoom</h1>
+	<form th:action="@{'/event/new'}">
+		<button>Забронировать комнату</button>
+	</form>
+	<table class="calendar">
+		<thead>
+			<tr>
+				<th />
+				<th th:each="date : ${page.getPageList()}">
+					[[${#temporals.dayOfWeekName(date)}]] <br />
+					[[${#temporals.format(date, 'dd.MM.yyyy')}]]
+				</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr th:each="time : ${timeList}">
+				<td>
+					[[${#temporals.format(time, 'mm:HH')}]]
+				</td>
+				<td th:each="date : ${page.getPageList()}"
+					th:with="event=${service.getEventBetweenDates( dateTime.of(date, time) )}">
+					<form th:if="${event} != null" th:action="@{'/event/' + ${event.id}}">
+						<button>
+							[[${event.title}]] 		   <br />
+						 	[[${event.user.username}]] <br />
+						 	[[${event.guest.username}]]
+						</button>
+					</form>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+	<span th:if="${page.isFirstPage()}">Предыдущая</span>
+	<a th:unless="${page.isFirstPage()}" th:href="@{'/page/' + ${page.getPage() - 1}}">Предыдущая</a>
+	<span th:if="${page.isLastPage()}">Следующая</span>
+	<a th:unless="${page.isLastPage()}" th:href="@{'/page/' + ${page.getPage() + 1}}">Следующая</a>
+</body>
+</html>

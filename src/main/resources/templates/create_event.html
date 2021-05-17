@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html  xmlns="http://www.w3.org/1999/xhtml" 
+       xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="UTF-8">
+<title>Бронирование комнаты</title>
+<link rel="stylesheet" th:href="@{/calendar.css}" />
+</head>
+<body>
+	<div th:if="${currUser != null}" class="userInfo">
+		[[${currUser.surname}]]
+		<form method="POST" th:action="@{/logout}">
+			<input type="submit" value="Выйти"/>
+		</form>
+	</div>
+	<h1>Бронирование комнаты</h1>
+	<form th:method="POST" 
+		  th:action="@{/event/new}"
+		  th:object="${eventForm}">
+		  
+			<label for="title">Заглавие: </label>
+			<input type="text" th:field="*{title}" />
+			<span th:if="${#fields.hasErrors('title')}"
+				  th:errors="*{title}"/>
+			</br>
+			<label for="description">Описание: </label>
+			<input type="text" th:field="*{description}" />
+			<span th:if="${#fields.hasErrors('description')}"
+				  th:errors="*{description}"/>
+			</br>
+			<label for="guestUsername">Логин гостя: </label>
+			<input type="text" th:field="*{guestUsername}" />
+			<span th:if="${#fields.hasErrors('guestUsername')}"
+				  th:errors="*{guestUsername}"/>
+			</br>
+			<label for="startDate">Дата бронирования: </label>
+			<select name="startDate" th:field="*{startDate}">
+				<option th:each="date : ${dateList}"
+						th:value="${#temporals.format(date, 'dd.MM.yyyy')}">[[${#temporals.format(date, 'dd.MM.yyyy')}]]</option>
+			</select>
+			</br>
+			<label for="startTime">Время бронирования: </label>
+			<select name="startTime" th:field="*{startTime}">
+				<option th:each="time : ${timeList}"
+						th:value="${time}">[[${#temporals.format(time, 'mm:HH')}]]</option>
+			</select>
+			<span th:if="${#fields.hasErrors('startTime')}"
+				  th:errors="*{startTime}"/>
+			</br>
+			<label for="eventDuration">Продолжительность бронирования: </label>
+			<select name="durationHours" th:field="*{durationHours}">
+				<option th:each="time : ${timeList}"
+						th:value="${time}">[[${#temporals.format(time, 'H')}]]</option>
+			</select>
+			<select name="durationMinutes" th:field="*{durationMinutes}">
+				<option th:each="minute : ${minuteList}"
+						th:value="${minute}">[[${minute}]]</option>
+			</select>
+			<span th:if="${#fields.hasErrors('durationMinutes')}"
+				  th:errors="*{durationMinutes}"/>
+			</br>
+			
+				
+				
+			<input type="submit" value="Создать"/>
+			</form>
+	
+</body>
+</html>
