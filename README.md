@@ -11,6 +11,8 @@ To use the app, you must complete the following steps
 * `psql -U postgres`
 * `postgres=# create database meet-room;`
 * `postgres=# create user admin with encrypted password '1q2a3z';`
+### Restore a dump of the database
+* `psql -U postgres meetroom < db/meetroom_dump`
 ### Run application
 * `mvn clean package`
 * `java -jar target/meet-room-0.0.1-SNAPSHOT.jar`
