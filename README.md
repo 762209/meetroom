@@ -9,7 +9,7 @@ Testing project for booking meeting
 To use the app, you must complete the following steps
 ### Create the Database
 * `psql -U postgres`
-* `postgres=# create database meet-room;`
+* `postgres=# create database meetroom;`
 * `postgres=# create user admin with encrypted password '1q2a3z';`
 ### Restore a dump of the database
 * `psql -U postgres meetroom < db/meetroom_dump`
