@@ -12,15 +12,10 @@ import meetroom.domain.Event;
 @Repository
 public interface EventRepository  extends CrudRepository<Event, Long> {
 	List<Event> findAll();
-	
-	Event findByStartDateLessThanEqualAndEndDateGreaterThanEqual(LocalDateTime end, LocalDateTime start);
-	
-	@Query(value = "from Event where startDate <= :startDate AND endDate > :endDate")
+
+	@Query(value = "from Event where startDate between :startDate AND :endDate OR endDate between :startDate AND :endDate")
 	Event getEventBetweenDates(@Param("startDate")LocalDateTime startDate, @Param("endDate")LocalDateTime endDate);
 	
 	@Query(value = "from Event where startDate <= :date AND endDate > :date")
 	Event getEventBetweenDates(@Param("date")LocalDateTime date);
-	
-	@Query(value = "from Event where startDate <= :startDate AND endDate > :endDate")
-	Boolean existsBetweenDates(@Param("startDate")LocalDateTime startDate, @Param("endDate")LocalDateTime endDate);
 }
