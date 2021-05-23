@@ -5,6 +5,7 @@ import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 
+import javax.swing.text.html.FormSubmitEvent.MethodType;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,7 @@ import meetroom.services.MeetingService;
 import meetroom.utils.DateUtil;
 import meetroom.utils.EventFormValidator;
 import meetroom.utils.ImageUtil;
+import static meetroom.utils.EventFormValidator.Methods;
 
 @Controller
 @RequestMapping("/event")
@@ -95,6 +97,7 @@ public class EventController {
 		eventForm.setStartDate(LocalDate.parse(date, dtf));
 		eventForm.setUserService(userService);
 		
+		validator.setMethodType(Methods.SAVE);
 		validator.validate(eventForm, errors);
 		if (errors.hasErrors()) {
 			return "create_event";
@@ -120,7 +123,8 @@ public class EventController {
 	@PostMapping("update/{id}")
 	public String updateEvent(@ModelAttribute("eventForm") @Valid EventForm eventForm, Errors errors, @AuthenticationPrincipal User user,
 			Model model, @PathVariable("id") Long id) {
-		
+		validator.setMethodType(Methods.UPDATE);
+		validator.setId(id);
 		validator.validate(eventForm, errors);
 		if (errors.hasErrors()) {
 			eventForm.setId(id);
