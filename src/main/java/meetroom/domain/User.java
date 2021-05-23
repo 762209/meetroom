@@ -3,11 +3,14 @@ package meetroom.domain;
 import java.util.Arrays;
 import java.util.Collection;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.springframework.security.core.GrantedAuthority;
@@ -23,7 +26,7 @@ import lombok.RequiredArgsConstructor;
 @Data
 @NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @RequiredArgsConstructor
-@Table(name="user_mr")
+@Table(name="users")
 public class User implements UserDetails {
 
 	private static final long serialVersionUID = 1L;
@@ -37,6 +40,9 @@ public class User implements UserDetails {
 	private String password;
 	private String name;
 	private String surname;
+	@OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+	@JoinColumn
+	private Photo photo;
 	
 	public User(String username, String password, String name, String surname) {
 		this.username = username;

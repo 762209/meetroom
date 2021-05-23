@@ -1,16 +1,19 @@
 package meetroom.db;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import meetroom.data.EventRepository;
 import meetroom.data.UserRepository;
 import meetroom.domain.Event;
+import meetroom.domain.Photo;
 import meetroom.domain.User;
 
 @Component
@@ -23,10 +26,24 @@ public class Data {
 	private PasswordEncoder passwordEncoder;
 	
 	@PostConstruct
-	public void init() {
+	public void init() throws IOException {
+		byte[] img1 = new ClassPathResource("/static/images/korjic.jpg")
+				.getInputStream()
+				.readAllBytes();
+		byte[] img2 = new ClassPathResource("/static/images/zeliboba.jpg")
+				  .getInputStream()
+				  .readAllBytes();
+		byte[] img3 = new ClassPathResource("/static/images/eliaz.jpg")
+				  .getInputStream()
+				  .readAllBytes();
+		
 		User user1 = new User("alexei.stratonov", passwordEncoder.encode("123"), "Alexei", "Stratonov");
+		user1.setPhoto(new Photo(img1));
 		User user2 = new User("alexei.filipov", passwordEncoder.encode("123"), "Alexei", "Filipov");
+		user2.setPhoto(new Photo(img2));
 		User user3 = new User("dmitrii.kuznetsov", passwordEncoder.encode("123"), "Dmitrii", "Kuznetsov");
+		user3.setPhoto(new Photo(img3));
+		
 		userRepo.save(user1); userRepo.save(user2); userRepo.save(user3);
 		
 		LocalDateTime start = LocalDateTime.now();

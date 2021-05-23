@@ -1,16 +1,19 @@
 package meetroom.web;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
+import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import meetroom.domain.User;
 import meetroom.services.MeetingService;
+import meetroom.utils.ImageUtil;
 
 @Controller
 @RequestMapping("/")
@@ -19,6 +22,11 @@ public class MeetingController {
 	
 	public MeetingController(MeetingService service) {
 		this.service = service;
+	}
+	
+	@ModelAttribute("imgUtil")
+	public ImageUtil imgUtil() {
+		return new ImageUtil();
 	}
 	
 	@GetMapping
@@ -30,12 +38,15 @@ public class MeetingController {
 	public String showPage(Model model, @AuthenticationPrincipal User user,
 			@PathVariable("pageNumber") int currentPage) {
 		
-		model.addAttribute("currUser", user);
-		model.addAttribute("page", service.getDatePage(currentPage));
-		model.addAttribute("timeList", service.getTimeList());
-		model.addAttribute("dateTime", LocalDateTime.now());
-		model.addAttribute("service", service);
+		PagedListHolder<LocalDate> dateHolder = service.getDatePagedListHolder();
+		dateHolder.setPage(currentPage);
 		
+		model.addAttribute("currUser", user);
+		model.addAttribute("page", dateHolder);
+		model.addAttribute("eventsMap", service.getEventsMap(currentPage));
+		model.addAttribute("timeList", service.getTimeList());
+		model.addAttribute("dateNow", LocalDate.now());
+		model.addAttribute("service", service);
 		
 		return "calendar";
 	}

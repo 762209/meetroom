@@ -25,7 +25,7 @@
 	<form th:action="@{/}"> <button>На главную страницу</button> </form>
 	<h1>Бронирование комнаты</h1>
 	<form th:method="POST" 
-		  th:action="@{'/event/new/' + ${date}}"
+		  th:action="@{'/event/update/' + ${eventForm.getId()}}"
 		  th:object="${eventForm}">
 		  
 			<label for="title">Заглавие: </label>
@@ -64,9 +64,9 @@
 				  th:errors="*{durationMinutes}"/>
 			</br>
 			
+			<input type="hidden" th:value=${eventForm.startDate} th:field=*{startDate}/>
 				
-				
-			<input type="submit" value="Создать"/>
+			<input type="submit" value="Редактировать"/>
 			</form>
 	
 </body>
