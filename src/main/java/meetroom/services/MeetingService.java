@@ -4,8 +4,12 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.stereotype.Service;
@@ -22,27 +26,32 @@ public class MeetingService {
 		this.repository = repository;
 	}
 	
-	public List<LocalDate> getDateList() {
-		List<LocalDate> dateList = new ArrayList<LocalDate>();
-		for (int dayNumber = 0; dayNumber < 21; dayNumber++)
+	public List<LocalDate> getDateList(int firstDay, int lastDay) {
+		List<LocalDate> dateList = new ArrayList<LocalDate>(7);
+		for (int dayNumber = firstDay; dayNumber < lastDay; dayNumber++)
 			dateList.add(DateUtil.currentMonday.minusDays(7).plusDays(dayNumber));
 		return dateList;
 	}
 	
-	public List<LocalDate> getDateListForBookig() {
-		List<LocalDate> dateList = new ArrayList<LocalDate>();
-		for (int dayNumber = 0; dayNumber <= 14; dayNumber++)
-			dateList.add(LocalDate.now().plusDays(dayNumber));
-		return dateList;
+	public HashMap<LocalTime, Event[]> getEventsMap(int pageNumber) {
+		List<LocalTime> timeList = getTimeList();
+		HashMap<LocalTime, Event[]> eventsMap = new LinkedHashMap<LocalTime, Event[]>(24);
+		for (int i = 0; i < timeList.size(); i++) {
+			LocalTime time = timeList.get(i);
+			Event[] events = getDateList(0 + (7 * pageNumber), 7 + (7 * pageNumber)).stream().map(date -> repository.getEventBetweenDates(LocalDateTime.of(date, time)))
+																							 .toArray(Event[]::new);
+			eventsMap.put(time, events);
+		}
+		return eventsMap;
 	}
-	public PagedListHolder<LocalDate> getDatePage(int currentPage) {
-		PagedListHolder<LocalDate> page = new PagedListHolder<LocalDate>(getDateList());
+	
+	public PagedListHolder<LocalDate> getDatePagedListHolder() {
+		PagedListHolder<LocalDate> page = new PagedListHolder<LocalDate>(getDateList(0, 21));
 		page.setPageSize(7);
-		page.setPage(currentPage);
 		return page;
 	}
 	public List<LocalTime> getTimeList() {
-		List<LocalTime> timeList = new ArrayList<LocalTime>();
+		List<LocalTime> timeList = new ArrayList<LocalTime>(24);
 		for (int hours = 0; hours < 24; hours++)
 			timeList.add(LocalTime.MIDNIGHT.plusHours(hours));
 		return timeList;
@@ -55,5 +64,8 @@ public class MeetingService {
 	}
 	public Event save(Event event) {
 		return repository.save(event);
+	}
+	public void deleteById(Long id) {
+		repository.deleteById(id);
 	}
 }
