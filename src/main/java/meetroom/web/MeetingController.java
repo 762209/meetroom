@@ -1,8 +1,6 @@
 package meetroom.web;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.List;
 
 import org.springframework.beans.support.PagedListHolder;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -13,9 +11,7 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import meetroom.domain.Event;
 import meetroom.domain.User;
-import meetroom.forms.EventForm;
 import meetroom.services.MeetingService;
 import meetroom.utils.ImageUtil;
 
