@@ -8,32 +8,47 @@
 </head>
 <body>
 	<div th:if="${currUser != null}" class="userInfo">
+		<img th:if="${currUser.getPhoto != null and currUser.getPhoto.getPhoto.length != 0}"
+			 th:src="'data:image/jpeg;base64,'+${imgUtil.getImgData(currUser.getPhoto.getPhoto())}" 
+			 width="100px" height="80px"
+			 class="userImage" />
+		<img th:if="${currUser.getPhoto == null or currUser.getPhoto.getPhoto.length == 0}"
+			 th:src="@{/images/no_image.png}"
+			 width="100px" height="80px"
+			 class="userImage" />
+		<br />
 		[[${currUser.surname}]]
 		<form method="POST" th:action="@{/logout}">
 			<input type="submit" value="Выйти"/>
 		</form>
 	</div>
 	<h1>MeetRoom</h1>
-	<form th:action="@{'/event/new'}">
-		<button>Забронировать комнату</button>
-	</form>
 	<table class="calendar">
 		<thead>
 			<tr>
 				<th />
 				<th th:each="date : ${page.getPageList()}">
-					[[${#temporals.dayOfWeekName(date)}]] <br />
-					[[${#temporals.format(date, 'dd.MM.yyyy')}]]
+					<form th:if="${date >= dateNow}" th:action="@{'/event/new/' + ${#temporals.format(date, 'dd.MM.yyyy')}}">
+						<button>
+							[[${#temporals.dayOfWeekName(date)}]] <br />
+							[[${#temporals.format(date, 'dd.MM.yyyy')}]]
+						</button>
+					</form>
+					<div th:unless="${date >= dateNow}">
+						[[${#temporals.dayOfWeekName(date)}]] <br />
+						[[${#temporals.format(date, 'dd.MM.yyyy')}]]
+					</div>
 				</th>
 			</tr>
 		</thead>
 		<tbody>
-			<tr th:each="time : ${timeList}">
+		
+			<tr th:each="entry : ${eventsMap.entrySet()}"
+				th:with="time = ${entry.getKey()}">
 				<td>
 					[[${#temporals.format(time, 'mm:HH')}]]
 				</td>
-				<td th:each="date : ${page.getPageList()}"
-					th:with="event=${service.getEventBetweenDates( dateTime.of(date, time) )}">
+				<td th:each="event : ${entry.getValue()}">
 					<form th:if="${event} != null" th:action="@{'/event/' + ${event.id}}">
 						<button>
 							[[${event.title}]] 		   <br />

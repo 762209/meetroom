@@ -8,14 +8,24 @@
 </head>
 <body>
 	<div th:if="${currUser != null}" class="userInfo">
+		<img th:if="${currUser.getPhoto != null and currUser.getPhoto.getPhoto.length != 0}"
+			 th:src="'data:image/jpeg;base64,'+${imgUtil.getImgData(currUser.getPhoto.getPhoto())}" 
+			 width="100px" height="80px"
+			 class="userImage" />
+		<img th:if="${currUser.getPhoto == null or currUser.getPhoto.getPhoto.length == 0}"
+			 th:src="@{/images/no_image.png}"
+			 width="100px" height="80px"
+			 class="userImage" />
+		<br />
 		[[${currUser.surname}]]
 		<form method="POST" th:action="@{/logout}">
 			<input type="submit" value="Выйти"/>
 		</form>
 	</div>
+	<form th:action="@{/}"> <button>На главную страницу</button> </form>
 	<h1>Бронирование комнаты</h1>
 	<form th:method="POST" 
-		  th:action="@{/event/new}"
+		  th:action="@{'/event/new/' + ${date}}"
 		  th:object="${eventForm}">
 		  
 			<label for="title">Заглавие: </label>
@@ -32,12 +42,6 @@
 			<input type="text" th:field="*{guestUsername}" />
 			<span th:if="${#fields.hasErrors('guestUsername')}"
 				  th:errors="*{guestUsername}"/>
-			</br>
-			<label for="startDate">Дата бронирования: </label>
-			<select name="startDate" th:field="*{startDate}">
-				<option th:each="date : ${dateList}"
-						th:value="${#temporals.format(date, 'dd.MM.yyyy')}">[[${#temporals.format(date, 'dd.MM.yyyy')}]]</option>
-			</select>
 			</br>
 			<label for="startTime">Время бронирования: </label>
 			<select name="startTime" th:field="*{startTime}">
