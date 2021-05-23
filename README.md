@@ -25,9 +25,9 @@ alexei.stratonov | 123
 alexei.filipov | 123
 dmitrii.kuznetsov | 123
 
-If you want reserve meeting room click on the button "Забронировать комнату" and
+If you want reserve meeting room click a date in the header table and
 on the opened page insert a start time, duration, title, guest username (login of another user) and description.
-If you want to see a full detail you need click on the event card.
+If you want to see a full detail you need click on the event card. Also you can update or delete object on detail page.
 
 
 ## Сonstraints
