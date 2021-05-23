@@ -41,7 +41,7 @@ public class EventFormValidator implements Validator {
 		}
 		LocalDateTime start = LocalDateTime.of(eventForm.getStartDate(), eventForm.getStartTime());
 		LocalDateTime end = start.plusHours(eventForm.getDurationHours().getHour()).withMinute(eventForm.getDurationMinutes());
-		if (eventRepo.getEventBetweenDates(start, end) != null){
+		if (eventRepo.getEventBetweenDates(start, end) != null) {
 			errors.rejectValue("durationMinutes", null, "На данное время уже существует резерв");
 		}
 		if (start.isBefore(LocalDateTime.now())) {
