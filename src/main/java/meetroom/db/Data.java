@@ -6,7 +6,6 @@ import java.time.LocalDateTime;
 
 import javax.annotation.PostConstruct;
 
-import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
