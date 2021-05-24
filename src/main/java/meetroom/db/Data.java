@@ -1,10 +1,12 @@
 package meetroom.db;
 
 import java.io.IOException;
+import java.nio.file.Files;
 import java.time.LocalDateTime;
 
 import javax.annotation.PostConstruct;
 
+import org.apache.tomcat.util.http.fileupload.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -27,15 +29,9 @@ public class Data {
 	
 	@PostConstruct
 	public void init() throws IOException {
-		byte[] img1 = new ClassPathResource("/static/images/korjic.jpg")
-				.getInputStream()
-				.readAllBytes();
-		byte[] img2 = new ClassPathResource("/static/images/zeliboba.jpg")
-				  .getInputStream()
-				  .readAllBytes();
-		byte[] img3 = new ClassPathResource("/static/images/eliaz.jpg")
-				  .getInputStream()
-				  .readAllBytes();
+		byte[] img1 = Files.readAllBytes(new ClassPathResource("/static/images/korjic.jpg").getFile().toPath());
+		byte[] img2 = Files.readAllBytes(new ClassPathResource("/static/images/zeliboba.jpg").getFile().toPath());
+		byte[] img3 = Files.readAllBytes(new ClassPathResource("/static/images/eliaz.jpg").getFile().toPath());
 		
 		User user1 = new User("alexei.stratonov", passwordEncoder.encode("123"), "Alexei", "Stratonov");
 		user1.setPhoto(new Photo(img1));
